@@ -18,9 +18,15 @@ class Mastermind
       puts 'Guess a combination (Format: RGBC)'
       @guess_code = gets.chomp.upcase
       printCode
+      Logic.printDots(@secret_code, @guess_code)
       puts "Current round: #{@@rounds}"
       @@rounds += 1
-      puts 'You are correct!' if @guess_code == @secret_code
+      puts 'You are correct' if @guess_code == @secret_code
+      # if @guess_code == @secret_code
+      #   puts 'You are correct!'
+      # else
+      #   Logic.printDots(@secret_code, @guess_code)
+      # end
     end
   end
 
@@ -34,7 +40,11 @@ The 6 colors that can be choose are
 
     #{Rainbow('  1  ').background(:red)} #{Rainbow('  2  ').background(:blue)} #{Rainbow('  3  ').background(:green)} #{Rainbow('  4  ').background(:yellow)} #{Rainbow('  5  ').background(:cyan)} #{Rainbow('  6  ').background(:magenta)}
 
-The codebreaker tries to guess the pattern, in order and color, within twelve turns.\n
+The codebreaker tries to guess the pattern, in order and color, within twelve turns.
+
+#{Rainbow('•').red} means correct color and correct position.
+• means correct color but wrong position.
+\n
 "
   end
 
@@ -55,7 +65,6 @@ The codebreaker tries to guess the pattern, in order and color, within twelve tu
         print "#{Rainbow('  6  ').background(:magenta)}  "
       end
     end
-    print "\n"
   end
 
   def chooseMode
