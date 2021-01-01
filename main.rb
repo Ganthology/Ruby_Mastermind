@@ -32,22 +32,23 @@ class Mastermind
   end
 
   def printCode
-    @guess_code.split.each do |code|
+    @guess_code.split("").each do |code|
       case code
       when '1'
-      print "#{Rainbow(' 1 ').background(:red)}"
+      print "#{Rainbow('  1  ').background(:red)}  "
       when '2'
-      print "#{Rainbow(' 2 ').background(:blue)}"
+      print "#{Rainbow('  2  ').background(:blue)}  "
       when '3'
-      print "#{Rainbow(' 3 ').background(:green)}"
+      print "#{Rainbow('  3  ').background(:green)}  "
        when '4'
-      print "#{Rainbow(' 4 ').background(:yellow)}"
+      print "#{Rainbow('  4  ').background(:yellow)}  "
       when '5'
-      print "#{Rainbow(' 5 ').background(:cyan)}"
+      print "#{Rainbow('  5  ').background(:cyan)}  "
       when '6'
-      print "#{Rainbow(' 6 ').background(:magenta)}"
+      print "#{Rainbow('  6  ').background(:magenta)}  "
       end
     end
+    print "\n"
   end
 end
 
