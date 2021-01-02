@@ -11,16 +11,27 @@ class Mastermind
   def initialize
     instructions
     choose_mode
-    @secret_code = Computer.code_maker
+
+    case @mode
+    when '1'
+      @secret_code = Computer.code_maker
+    when '2'
+      puts 'Enter you secret code (Format: 1234): '
+      @secret_code = gets.chomp
+      until Logic.valid_input?(@secret_code)
+        puts 'Invalid input, please enter in the correct format (Format: 1234): '
+        @secret_code = gets.chomp
+      end
+    end
     p @secret_code
 
     until @guess_code == @secret_code || @@rounds > 12
-      puts 'Guess a combination (Format: 1234)'
-      @guess_code = gets.chomp.upcase
+      puts 'Guess a combination (Format: 1234): '
+      @guess_code = gets.chomp
 
       until Logic.valid_input?(@guess_code)
-        puts 'Invalid input, please enter in the correct format (Format: 1234)...'
-        @guess_code = gets.chomp.upcase
+        puts 'Invalid input, please enter in the correct format (Format: 1234): '
+        @guess_code = gets.chomp
       end
 
       print_code
@@ -85,7 +96,7 @@ The codebreaker tries to guess the pattern, in order and color, within twelve tu
 
 "
     until @mode == '1' || @mode == '2'
-      puts "Choose (1) or (2)"
+      puts 'Choose (1) or (2)'
       @mode = gets.chomp
     end
     case @mode
