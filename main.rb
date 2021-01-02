@@ -30,7 +30,7 @@ class Mastermind
       @@rounds += 1
 
       puts 'You are correct!' if @guess_code == @secret_code
-      
+
       puts ''
       # if @guess_code == @secret_code
       #   puts 'You are correct!'
@@ -83,9 +83,18 @@ The codebreaker tries to guess the pattern, in order and color, within twelve tu
     1) Computer codemaker, Human codebreaker
     2) Human codemaker, Computer codebreaker
 
-Choose (1) or (2)"
-    mode = gets.chomp
-    mode
+"
+    until @mode == '1' || @mode == '2'
+      puts "Choose (1) or (2)"
+      @mode = gets.chomp
+    end
+    case @mode
+    when '1'
+      puts 'You are the codebreaker!'
+    when '2'
+      puts 'You are the codemaker!'
+    end
+    @mode
   end
 end
 
