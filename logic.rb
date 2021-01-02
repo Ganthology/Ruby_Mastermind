@@ -4,13 +4,13 @@ module Logic
   # red dot = correct color, correct position
   RED_DOT = Rainbow('•').red
   # white dot = correct color, wrong position
-  WHITE_DOT = '•'
+  WHITE_DOT = '•'.freeze
 
   def self.correct_place(secret_code, guess_code)
     counter = 0
     secret_code.split('').each_index do |index|
-      counter += 1 if (secret_code.split('')[index] == guess_code.split('')[index])
-      #puts index
+      counter += 1 if secret_code.split('')[index] == guess_code.split('')[index]
+      # puts index
     end
     counter
   end
@@ -19,13 +19,26 @@ module Logic
     (secret_code.split('') & guess_code.split('')).flat_map { |n| [n] * [secret_code.split('').count(n), guess_code.split('').count(n)].min }.length
   end
 
-  def self.printDots(secret_code, guess_code)
+  def self.print_dots(secret_code, guess_code)
     correct_place = Logic.correct_place(secret_code, guess_code)
     correct_color = Logic.correct_color(secret_code, guess_code)
     correct_place.times { print "#{RED_DOT} " }
     (correct_color - correct_place).times { print "#{WHITE_DOT} " }
     print("\n")
   end
+
+  def self.valid_input?(guess_code)
+    return false if guess_code.length != 4
+
+    begin
+      return true unless Float(guess_code).nil?
+    rescue StandardError
+      false
+    end
+  end
 end
 
-#Logic.printDots('1133', '1331')
+# Logic.printDots('1133', '1331')
+# p Logic.valid_input?('1111')
+# p Logic.valid_input?('11111')
+# p Logic.valid_input?('1-=a')

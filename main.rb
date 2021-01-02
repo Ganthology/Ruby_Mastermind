@@ -10,18 +10,28 @@ class Mastermind
 
   def initialize
     instructions
-    chooseMode
-    @secret_code = Computer.codeMaker
+    choose_mode
+    @secret_code = Computer.code_maker
     p @secret_code
 
     until @guess_code == @secret_code || @@rounds > 12
-      puts 'Guess a combination (Format: RGBC)'
+      puts 'Guess a combination (Format: 1234)'
       @guess_code = gets.chomp.upcase
-      printCode
-      Logic.printDots(@secret_code, @guess_code)
+
+      until Logic.valid_input?(@guess_code)
+        puts 'Invalid input, please enter in the correct format (Format: 1234)...'
+        @guess_code = gets.chomp.upcase
+      end
+
+      print_code
+      Logic.print_dots(@secret_code, @guess_code)
+
       puts "Current round: #{@@rounds}"
       @@rounds += 1
-      puts 'You are correct' if @guess_code == @secret_code
+
+      puts 'You are correct!' if @guess_code == @secret_code
+      
+      puts ''
       # if @guess_code == @secret_code
       #   puts 'You are correct!'
       # else
@@ -48,7 +58,7 @@ The codebreaker tries to guess the pattern, in order and color, within twelve tu
 "
   end
 
-  def printCode
+  def print_code
     @guess_code.split('').each do |code|
       case code
       when '1'
@@ -67,7 +77,7 @@ The codebreaker tries to guess the pattern, in order and color, within twelve tu
     end
   end
 
-  def chooseMode
+  def choose_mode
     puts "Choose mode for the game:
 
     1) Computer codemaker, Human codebreaker
