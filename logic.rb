@@ -20,11 +20,19 @@ module Logic
   end
 
   def self.print_dots(secret_code, guess_code)
+    hint = ''
     correct_place = Logic.correct_place(secret_code, guess_code)
     correct_color = Logic.correct_color(secret_code, guess_code)
-    correct_place.times { print "#{RED_DOT} " }
-    (correct_color - correct_place).times { print "#{WHITE_DOT} " }
+    correct_place.times do
+      hint << 'R'
+      print "#{RED_DOT} " 
+    end
+    (correct_color - correct_place).times do
+      hint << 'W'
+      print "#{WHITE_DOT} " 
+    end
     print("\n")
+    hint
   end
 
   def self.valid_input?(guess_code)

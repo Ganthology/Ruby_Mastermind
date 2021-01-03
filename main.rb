@@ -4,17 +4,17 @@ require 'rainbow'
 
 class Mastermind
   include Logic
-  include Computer
   @@rounds = 1
-  attr_accessor :secret_code, :mode
+  attr_accessor :secret_code, :mode, :hint
 
   def initialize
+    computer = Computer.new()
     instructions
     choose_mode
 
     case @mode
     when '1'
-      @secret_code = Computer.code_maker
+      @secret_code = computer.code_maker
     when '2'
       puts 'Enter you secret code (Format: 1234): '
       @secret_code = gets.chomp
@@ -35,7 +35,8 @@ class Mastermind
       end
 
       print_code
-      Logic.print_dots(@secret_code, @guess_code)
+      # hint in terms of "RRW"
+      @hint = Logic.print_dots(@secret_code, @guess_code)
 
       puts "Current round: #{@@rounds}"
       @@rounds += 1
