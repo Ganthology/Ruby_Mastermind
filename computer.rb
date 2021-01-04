@@ -1,4 +1,5 @@
 require './logic.rb'
+require 'set'
 
 class Computer
   include Logic
@@ -27,12 +28,12 @@ class Computer
     4.times.map { @@colors.sample }.join
   end
 
-  def code_breaker(round, hint)
-    if round > 1
+  def code_breaker(round = 0, hint)
+    if round > 0
       @possible_answers.keep_if{ |answer|
         @all_scores[round][answer] == hint
       }
-      guesses = @possible_scores.map do {|guess, scores_by_answer|
+      guesses = @possible_scores.map do |guess, scores_by_answer|
         scores_by_answer = scores_by_answer.select{|answer, score|
           @possible_answers.include?(answer)
         }
@@ -45,7 +46,6 @@ class Computer
         [worst_case_possibilities, impossible_guess, guess]
       end
       guesses.min.last
-      }
     else
       '1122'
     end

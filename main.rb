@@ -4,7 +4,7 @@ require 'rainbow'
 
 class Mastermind
   include Logic
-  @@rounds = 1
+  @@rounds = 0
   attr_accessor :secret_code, :mode, :hint
 
   def initialize
@@ -25,7 +25,7 @@ class Mastermind
     end
     p @secret_code
 
-    until @guess_code == @secret_code || @@rounds > 12
+    until @guess_code == @secret_code || @@rounds >= 12
       case @mode
       when '1'
         puts 'Guess a combination (Format: 1234): '
@@ -37,13 +37,13 @@ class Mastermind
         end
       when '2'
         puts 'Computer input a combination (Format: 1234): '
-        @guess_code = Computer.code_breaker(@round, @hint)
+        @guess_code = computer.code_breaker(@@rounds, @hint)
       end
       print_code
       # hint in terms of "RRW"
       @hint = Logic.print_dots(@secret_code, @guess_code)
 
-      puts "Current round: #{@@rounds}"
+      puts "Current round: #{@@rounds+1}"
       @@rounds += 1
 
       puts 'You are correct!' if @guess_code == @secret_code
