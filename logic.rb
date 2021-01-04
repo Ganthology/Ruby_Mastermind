@@ -19,17 +19,20 @@ module Logic
     (secret_code.split('') & guess_code.split('')).flat_map { |n| [n] * [secret_code.split('').count(n), guess_code.split('').count(n)].min }.length
   end
 
-  def self.print_dots(secret_code, guess_code)
+  def self.calculate_score(secret_code, guess_code)
     hint = ''
     correct_place = Logic.correct_place(secret_code, guess_code)
     correct_color = Logic.correct_color(secret_code, guess_code)
-    correct_place.times do
-      hint << 'R'
-      print "#{RED_DOT} " 
-    end
-    (correct_color - correct_place).times do
-      hint << 'W'
-      print "#{WHITE_DOT} " 
+    correct_place.times{ hint << 'R'}
+    (correct_color - correct_place).times{ hint << 'W'}
+    hint
+  end
+
+  def self.print_dots(secret_code, guess_code)
+    hint = self.calculate_score(secret_code, guess_code)
+    hint.chars.each do |char|
+      print "#{RED_DOT} " if char == 'R'
+      print "#{WHITE_DOT} " if char == 'W'
     end
     print("\n")
     hint
@@ -37,6 +40,7 @@ module Logic
 
   def self.valid_input?(guess_code)
     return false if guess_code.length != 4
+    return false if !guess_code.chars.all?('1'..'6')
 
     begin
       return true unless Float(guess_code).nil?

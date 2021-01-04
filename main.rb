@@ -26,14 +26,19 @@ class Mastermind
     p @secret_code
 
     until @guess_code == @secret_code || @@rounds > 12
-      puts 'Guess a combination (Format: 1234): '
-      @guess_code = gets.chomp
-
-      until Logic.valid_input?(@guess_code)
-        puts 'Invalid input, please enter in the correct format (Format: 1234): '
+      case @mode
+      when '1'
+        puts 'Guess a combination (Format: 1234): '
         @guess_code = gets.chomp
-      end
 
+          until Logic.valid_input?(@guess_code)
+          puts 'Invalid input, please enter in the correct format (Format: 1234):   '
+          @guess_code = gets.chomp
+        end
+      when '2'
+        puts 'Computer input a combination (Format: 1234): '
+        @guess_code = Computer.code_breaker(@round, @hint)
+      end
       print_code
       # hint in terms of "RRW"
       @hint = Logic.print_dots(@secret_code, @guess_code)
@@ -60,7 +65,7 @@ One will become the codemaker and another one will have to guess the secret code
 The codemaker chooses a pattern of four code pegs.
 The 6 colors that can be choose are
 
-    #{Rainbow('  1  ').background(:red)} #{Rainbow('  2  ').background(:blue)} #{Rainbow('  3  ').background(:green)} #{Rainbow('  4  ').background(:yellow)} #{Rainbow('  5  ').background(:cyan)} #{Rainbow('  6  ').background(:magenta)}
+#{Rainbow('  1  ').background(:red)} #{Rainbow('  2  ').background(:blue)} #{Rainbow('  3  ').background(:green)} #{Rainbow('  4  ').background(:yellow)} #{Rainbow('  5  ').background(:cyan)} #{Rainbow('  6  ').background(:magenta)}
 
 The codebreaker tries to guess the pattern, in order and color, within twelve turns.
 
