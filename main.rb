@@ -22,31 +22,36 @@ class Mastermind
         puts 'Invalid input, please enter in the correct format (Format: 1234): '
         @secret_code = gets.chomp
       end
+      print_code(@secret_code)
+      puts ''
       computer = Computer.new
     end
-    p @secret_code
+    # p @secret_code
 
     until @guess_code == @secret_code || rounds >= 12
       case @mode
       when '1'
         puts 'Guess a combination (Format: 1234): '
         @guess_code = gets.chomp
-          until Logic.valid_input?(@guess_code)
-            puts 'Invalid input, please enter in the correct format (Format: 1234):   '
-            @guess_code = gets.chomp
-          end
+        until Logic.valid_input?(@guess_code)
+          puts 'Invalid input, please enter in the correct format (Format: 1234):   '
+          @guess_code = gets.chomp
+        end
       when '2'
+        puts 'The computer is thinking the next step... Please be patient...'
+        sleep 5
         puts 'Computer input a combination (Format: 1234): '
-        @guess_code = computer.code_breaker(rounds,@guess_code, @hint)
+        @guess_code = computer.code_breaker(rounds, @guess_code, @hint)
       end
-      print_code
+      print_code(@guess_code)
       # hint in terms of "RRW"
       @hint = Logic.print_dots(@secret_code, @guess_code)
 
-      puts "Current round: #{rounds+1}"
+      puts "Current round: #{rounds + 1}"
       rounds += 1
 
-      puts 'You are correct!' if @guess_code == @secret_code
+      puts 'You win the game!' if @guess_code == @secret_code && @mode == 1
+      puts 'Computer win the game!' if @guess_code == @secret_code && @mode == 2
 
       puts ''
       # if @guess_code == @secret_code
@@ -75,8 +80,8 @@ The codebreaker tries to guess the pattern, in order and color, within twelve tu
 "
   end
 
-  def print_code
-    @guess_code.split('').each do |code|
+  def print_code(code)
+    code.split('').each do |code|
       case code
       when '1'
         print "#{Rainbow('  1  ').background(:red)}  "
