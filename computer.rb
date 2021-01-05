@@ -6,11 +6,17 @@ class Computer
   # color_option = %w(R B G Y C M)
   # color_option = %w[1 2 3 4 5 6]
   # COLOR_OPTION = color_option.product(color_option).flatten
-  @@colors = '123456'.chars
+  attr_accessor :all_answers, :all_scores, :possible_scores, :possible_answers
+
   def initialize
-    @all_answers = @@colors.product(*[@@colors] * 3).map(&:join)
+    colors = '123456'.chars
+    @all_answers = colors.product(*[colors] * 3).map(&:join)
     @all_scores = Hash.new { |h, k| h[k] = {} }
 
+    # each pair of guess and answer are assigned to a score
+    # all_scores['1234']['1111'] = 'W'
+    # so we eliminate those that are impossible for each guess
+    # choose the next guess from the one in the remaining list
     @all_answers.product(@all_answers).each do |guess, answer|
       @all_scores[guess][answer] = Logic.calculate_score(guess, answer)
     end
@@ -25,16 +31,16 @@ class Computer
 
   def code_maker
     # COLOR_OPTION.sample(4).join
-    4.times.map { @@colors.sample }.join
+    4.times.map { colors.sample }.join
   end
 
-  def code_breaker(round = 0, hint)
+  def code_breaker(round = 0,guess = '', hint)
     if round > 0
       @possible_answers.keep_if{ |answer|
-        @all_scores[round][answer] == hint
+        @all_scores[guess][answer] == hint
       }
       guesses = @possible_scores.map do |guess, scores_by_answer|
-        scores_by_answer = scores_by_answer.select{|answer, score|
+        scores_by_answer = scores_by_answer.select{ |answer, _score|
           @possible_answers.include?(answer)
         }
         @possible_scores[guess] = scores_by_answer

@@ -4,17 +4,17 @@ require 'rainbow'
 
 class Mastermind
   include Logic
-  @@rounds = 0
   attr_accessor :secret_code, :mode, :hint
 
   def initialize
-    computer = Computer.new()
+    rounds = 0
     instructions
     choose_mode
 
     case @mode
     when '1'
-      @secret_code = computer.code_maker
+      colors = '123456'.chars
+      @secret_code = 4.times.map { colors.sample }.join
     when '2'
       puts 'Enter you secret code (Format: 1234): '
       @secret_code = gets.chomp
@@ -22,29 +22,29 @@ class Mastermind
         puts 'Invalid input, please enter in the correct format (Format: 1234): '
         @secret_code = gets.chomp
       end
+      computer = Computer.new
     end
     p @secret_code
 
-    until @guess_code == @secret_code || @@rounds >= 12
+    until @guess_code == @secret_code || rounds >= 12
       case @mode
       when '1'
         puts 'Guess a combination (Format: 1234): '
         @guess_code = gets.chomp
-
           until Logic.valid_input?(@guess_code)
-          puts 'Invalid input, please enter in the correct format (Format: 1234):   '
-          @guess_code = gets.chomp
-        end
+            puts 'Invalid input, please enter in the correct format (Format: 1234):   '
+            @guess_code = gets.chomp
+          end
       when '2'
         puts 'Computer input a combination (Format: 1234): '
-        @guess_code = computer.code_breaker(@@rounds, @hint)
+        @guess_code = computer.code_breaker(rounds,@guess_code, @hint)
       end
       print_code
       # hint in terms of "RRW"
       @hint = Logic.print_dots(@secret_code, @guess_code)
 
-      puts "Current round: #{@@rounds+1}"
-      @@rounds += 1
+      puts "Current round: #{rounds+1}"
+      rounds += 1
 
       puts 'You are correct!' if @guess_code == @secret_code
 
